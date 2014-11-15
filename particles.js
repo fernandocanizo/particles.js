@@ -66,7 +66,7 @@ particlesJS.oSetter = function (changesObject) {
 
 	for(var key in changesObject) {
 		if('object' === typeof changesObject[key]) { // recurse
-			particlesJS.oSetter(particlesJS.o[key], changesObject[key]);
+			particlesJS.oSetter(changesObject[key]);
 
 		} else { // set it!
 			particlesJS.o[key] = changesObject[key];
