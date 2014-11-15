@@ -1,5 +1,5 @@
 /* -----------------------------------------------
-/* Author : Vincent Garreau  - vincentgarreau.com 
+/* Author : Vincent Garreau  - vincentgarreau.com
 /* MIT license: http://opensource.org/licenses/MIT
 /* GitHub : https://github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
@@ -10,16 +10,8 @@ var particlesJS = {}; // define name space
 
 particlesJS.intervalId = null;
 
-
-particlesJS.launch = function (tag_id, params) {
-
-	/* particles.js variables with default values */
-	pJS = {
-		canvas: {
-			el: document.querySelector('#'+tag_id+' > canvas'),
-			w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
-			h: document.querySelector('#'+tag_id+' > canvas').offsetHeight
-		},
+// particlesJS defaults object
+particlesJS.o = {
 		particles: {
 			color: '#fff',
 			shape: 'circle',
@@ -61,126 +53,134 @@ particlesJS.launch = function (tag_id, params) {
 		}
 	};
 
+particlesJS.launch = function (tag_id, params) {
+	// append canvas to default object
+	particlesJS.o.canvas = {
+		el: document.querySelector('#'+tag_id+' > canvas'),
+		w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
+		h: document.querySelector('#'+tag_id+' > canvas').offsetHeight
+	},
+
 	/* params settings */
 	if(params){
 		if(params.particles){
-			if(params.particles.color) pJS.particles.color = params.particles.color;
-			if(params.particles.shape) pJS.particles.shape = params.particles.shape;
-			if(params.particles.opacity) pJS.particles.opacity = params.particles.opacity;
-			if(params.particles.size) pJS.particles.size = params.particles.size;
-			if(params.particles.size_random == false) pJS.particles.size_random = params.particles.size_random;
-			if(params.particles.nb) pJS.particles.nb = params.particles.nb;
+			if(params.particles.color) particlesJS.o.particles.color = params.particles.color;
+			if(params.particles.shape) particlesJS.o.particles.shape = params.particles.shape;
+			if(params.particles.opacity) particlesJS.o.particles.opacity = params.particles.opacity;
+			if(params.particles.size) particlesJS.o.particles.size = params.particles.size;
+			if(params.particles.size_random == false) particlesJS.o.particles.size_random = params.particles.size_random;
+			if(params.particles.nb) particlesJS.o.particles.nb = params.particles.nb;
 			if(params.particles.line_linked){
-				if(params.particles.line_linked.enable_auto == false) pJS.particles.line_linked.enable_auto = params.particles.line_linked.enable_auto;
-				if(params.particles.line_linked.distance) pJS.particles.line_linked.distance = params.particles.line_linked.distance;
-				if(params.particles.line_linked.color) pJS.particles.line_linked.color = params.particles.line_linked.color;
-				if(params.particles.line_linked.opacity) pJS.particles.line_linked.opacity = params.particles.line_linked.opacity;
-				if(params.particles.line_linked.width) pJS.particles.line_linked.width = params.particles.line_linked.width;
+				if(params.particles.line_linked.enable_auto == false) particlesJS.o.particles.line_linked.enable_auto = params.particles.line_linked.enable_auto;
+				if(params.particles.line_linked.distance) particlesJS.o.particles.line_linked.distance = params.particles.line_linked.distance;
+				if(params.particles.line_linked.color) particlesJS.o.particles.line_linked.color = params.particles.line_linked.color;
+				if(params.particles.line_linked.opacity) particlesJS.o.particles.line_linked.opacity = params.particles.line_linked.opacity;
+				if(params.particles.line_linked.width) particlesJS.o.particles.line_linked.width = params.particles.line_linked.width;
 				if(params.particles.line_linked.condensed_mode){
-					if(params.particles.line_linked.condensed_mode.enable == false) pJS.particles.line_linked.condensed_mode.enable = params.particles.line_linked.condensed_mode.enable;
-					//if(params.particles.line_linked.condensed_mode.acceleration == false) pJS.particles.line_linked.condensed_mode.acceleration = params.particles.line_linked.condensed_mode.acceleration;
-					if(params.particles.line_linked.condensed_mode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = params.particles.line_linked.condensed_mode.rotateX;
-					if(params.particles.line_linked.condensed_mode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = params.particles.line_linked.condensed_mode.rotateY;
+					if(params.particles.line_linked.condensed_mode.enable == false) particlesJS.o.particles.line_linked.condensed_mode.enable = params.particles.line_linked.condensed_mode.enable;
+					//if(params.particles.line_linked.condensed_mode.acceleration == false) particlesJS.o.particles.line_linked.condensed_mode.acceleration = params.particles.line_linked.condensed_mode.acceleration;
+					if(params.particles.line_linked.condensed_mode.rotateX) particlesJS.o.particles.line_linked.condensed_mode.rotateX = params.particles.line_linked.condensed_mode.rotateX;
+					if(params.particles.line_linked.condensed_mode.rotateY) particlesJS.o.particles.line_linked.condensed_mode.rotateY = params.particles.line_linked.condensed_mode.rotateY;
 				}
 			}
 			if(params.particles.anim){
-				if(params.particles.anim.enable == false) pJS.particles.anim.enable = params.particles.anim.enable;
-				if(params.particles.anim.speed) pJS.particles.anim.speed = params.particles.anim.speed;
+				if(params.particles.anim.enable == false) particlesJS.o.particles.anim.enable = params.particles.anim.enable;
+				if(params.particles.anim.speed) particlesJS.o.particles.anim.speed = params.particles.anim.speed;
 			}
 		}
 		if(params.interactivity){
-			if(params.interactivity.enable == false) pJS.interactivity.enable = params.interactivity.enable;
+			if(params.interactivity.enable == false) particlesJS.o.interactivity.enable = params.interactivity.enable;
 			if(params.interactivity.mouse){
-				if(params.interactivity.mouse.distance) pJS.interactivity.mouse.distance = params.interactivity.mouse.distance;
+				if(params.interactivity.mouse.distance) particlesJS.o.interactivity.mouse.distance = params.interactivity.mouse.distance;
 			}
-			if(params.interactivity.mode) pJS.interactivity.mode = params.interactivity.mode;
-			if(params.interactivity.detect_on) pJS.interactivity.detect_on = params.interactivity.detect_on;
+			if(params.interactivity.mode) particlesJS.o.interactivity.mode = params.interactivity.mode;
+			if(params.interactivity.detect_on) particlesJS.o.interactivity.detect_on = params.interactivity.detect_on;
 		}
-		pJS.retina_detect = params.retina_detect;
+		particlesJS.o.retina_detect = params.retina_detect;
 	}
 
 	/* convert hex colors to rgb */
-	pJS.particles.color_rgb = hexToRgb(pJS.particles.color);
-	pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
+	particlesJS.o.particles.color_rgb = hexToRgb(particlesJS.o.particles.color);
+	particlesJS.o.particles.line_linked.color_rgb_line = hexToRgb(particlesJS.o.particles.line_linked.color);
 
 	/* detect retina */
-	if(pJS.retina_detect){
+	if(particlesJS.o.retina_detect){
 		if(window.devicePixelRatio > 1){
-			pJS.retina = true;
-			pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
-			pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
-			pJS.particles.anim.speed = pJS.particles.anim.speed*2; 
-			pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
-			pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
-			pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2; 
+			particlesJS.o.retina = true;
+			particlesJS.o.canvas.w = particlesJS.o.canvas.el.offsetWidth*2;
+			particlesJS.o.canvas.h = particlesJS.o.canvas.el.offsetHeight*2;
+			particlesJS.o.particles.anim.speed = particlesJS.o.particles.anim.speed*2;
+			particlesJS.o.particles.line_linked.distance = particlesJS.o.particles.line_linked.distance*2;
+			particlesJS.o.particles.line_linked.width = particlesJS.o.particles.line_linked.width*2;
+			particlesJS.o.interactivity.mouse.distance = particlesJS.o.interactivity.mouse.distance*2;
 		}
 	};
 
 
 	/* ---------- CANVAS functions ------------ */
-	 
-	pJS.fn.canvasInit = function(){
-		pJS.canvas.ctx = pJS.canvas.el.getContext('2d');
+
+	particlesJS.o.fn.canvasInit = function(){
+		particlesJS.o.canvas.ctx = particlesJS.o.canvas.el.getContext('2d');
 	};
 
-	pJS.fn.canvasSize = function(){
-		pJS.canvas.el.width = pJS.canvas.w;
-		pJS.canvas.el.height = pJS.canvas.h;
+	particlesJS.o.fn.canvasSize = function(){
+		particlesJS.o.canvas.el.width = particlesJS.o.canvas.w;
+		particlesJS.o.canvas.el.height = particlesJS.o.canvas.h;
 
 		window.onresize = function(){
 			/* resize canvas */
-			if(pJS.retina){
-				pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
-				pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
+			if(particlesJS.o.retina){
+				particlesJS.o.canvas.w = particlesJS.o.canvas.el.offsetWidth*2;
+				particlesJS.o.canvas.h = particlesJS.o.canvas.el.offsetHeight*2;
 			}else{
-				pJS.canvas.w = pJS.canvas.el.offsetWidth;
-				pJS.canvas.h = pJS.canvas.el.offsetHeight;
+				particlesJS.o.canvas.w = particlesJS.o.canvas.el.offsetWidth;
+				particlesJS.o.canvas.h = particlesJS.o.canvas.el.offsetHeight;
 			}
-			pJS.canvas.el.width = pJS.canvas.w;
-			pJS.canvas.el.height = pJS.canvas.h;
+			particlesJS.o.canvas.el.width = particlesJS.o.canvas.w;
+			particlesJS.o.canvas.el.height = particlesJS.o.canvas.h;
 
 			/* repaint canvas */
-			pJS.fn.canvasPaint();
-			if(!pJS.particles.anim.enable){
-				pJS.fn.particlesRemove();
-				pJS.fn.canvasRemove();
+			particlesJS.o.fn.canvasPaint();
+			if(!particlesJS.o.particles.anim.enable){
+				particlesJS.o.fn.particlesRemove();
+				particlesJS.o.fn.canvasRemove();
 				launchParticles();
 			}
 		}
 	};
 
-	pJS.fn.canvasPaint = function(){
-		pJS.canvas.ctx.fillRect(0, 0, pJS.canvas.w, pJS.canvas.h);
+	particlesJS.o.fn.canvasPaint = function(){
+		particlesJS.o.canvas.ctx.fillRect(0, 0, particlesJS.o.canvas.w, particlesJS.o.canvas.h);
 	};
 
-	pJS.fn.canvasRemove = function(){
-		pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
+	particlesJS.o.fn.canvasRemove = function(){
+		particlesJS.o.canvas.ctx.clearRect(0, 0, particlesJS.o.canvas.w, particlesJS.o.canvas.h);
 	}
 
 
 	/* --------- PARTICLES functions ----------- */
 
-	pJS.fn.particle = function(color, opacity){
+	particlesJS.o.fn.particle = function(color, opacity){
 
 		/* position */
-		this.x = Math.random() * pJS.canvas.w;
-		this.y = Math.random() * pJS.canvas.h;
+		this.x = Math.random() * particlesJS.o.canvas.w;
+		this.y = Math.random() * particlesJS.o.canvas.h;
 
 		/* size */
-		if(pJS.retina){
-			if(pJS.particles.size_random){
-				this.radius = Math.random() * pJS.particles.size * 2;	
+		if(particlesJS.o.retina){
+			if(particlesJS.o.particles.size_random){
+				this.radius = Math.random() * particlesJS.o.particles.size * 2;
 			}else{
-				this.radius = pJS.particles.size * 2;	
+				this.radius = particlesJS.o.particles.size * 2;
 			}
 		}else{
-			if(pJS.particles.size_random){
-				this.radius = Math.random() * pJS.particles.size * 1;	
+			if(particlesJS.o.particles.size_random){
+				this.radius = Math.random() * particlesJS.o.particles.size * 1;
 			}else{
-				this.radius = pJS.particles.size * 1;	
+				this.radius = particlesJS.o.particles.size * 1;
 			}
 		}
-		
+
 		/* color */
 		this.color = color;
 
@@ -193,178 +193,178 @@ particlesJS.launch = function (tag_id, params) {
 
 		/* draw function */
 		this.draw = function(){
-			pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
-			pJS.canvas.ctx.beginPath();
+			particlesJS.o.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+			particlesJS.o.canvas.ctx.beginPath();
 
-			switch(pJS.particles.shape){
+			switch(particlesJS.o.particles.shape){
 				case 'circle':
-					pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+					particlesJS.o.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
 				break;
 
 				case 'edge':
-					pJS.canvas.ctx.rect(this.x, this.y, this.radius*2, this.radius*2);
+					particlesJS.o.canvas.ctx.rect(this.x, this.y, this.radius*2, this.radius*2);
 				break;
 
 				case 'triangle':
-					pJS.canvas.ctx.moveTo(this.x,this.y);
-					pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius*2);
-					pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius*2);
-					pJS.canvas.ctx.closePath();
+					particlesJS.o.canvas.ctx.moveTo(this.x,this.y);
+					particlesJS.o.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius*2);
+					particlesJS.o.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius*2);
+					particlesJS.o.canvas.ctx.closePath();
 				break;
 			}
-			
-			pJS.canvas.ctx.fill();
+
+			particlesJS.o.canvas.ctx.fill();
 		}
 
 	};
 
-	pJS.fn.particlesCreate = function(){
-		for(var i = 0; i < pJS.particles.nb; i++) {
-			pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity));
+	particlesJS.o.fn.particlesCreate = function(){
+		for(var i = 0; i < particlesJS.o.particles.nb; i++) {
+			particlesJS.o.particles.array.push(new particlesJS.o.fn.particle(particlesJS.o.particles.color_rgb, particlesJS.o.particles.opacity));
 		}
 	};
 
-	pJS.fn.particlesAnimate = function(){
-		for(var i = 0; i < pJS.particles.array.length; i++){
+	particlesJS.o.fn.particlesAnimate = function(){
+		for(var i = 0; i < particlesJS.o.particles.array.length; i++){
 			/* the particle */
-			var p = pJS.particles.array[i];
+			var p = particlesJS.o.particles.array[i];
 
 			/* move the particle */
-			p.x += p.vx * (pJS.particles.anim.speed/2);
-			p.y += p.vy * (pJS.particles.anim.speed/2);
+			p.x += p.vx * (particlesJS.o.particles.anim.speed/2);
+			p.y += p.vy * (particlesJS.o.particles.anim.speed/2);
 
 			/* change particle position if it is out of canvas */
-			if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
-			else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
-			if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
-			else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
+			if(p.x - p.radius > particlesJS.o.canvas.w) p.x = p.radius;
+			else if(p.x + p.radius < 0) p.x = particlesJS.o.canvas.w + p.radius;
+			if(p.y - p.radius > particlesJS.o.canvas.h) p.y = p.radius;
+			else if(p.y + p.radius < 0) p.y = particlesJS.o.canvas.h + p.radius;
 
 			/* Check distance between each particle and mouse position */
-			for(var j = i + 1; j < pJS.particles.array.length; j++){
-				var p2 = pJS.particles.array[j];
+			for(var j = i + 1; j < particlesJS.o.particles.array.length; j++){
+				var p2 = particlesJS.o.particles.array[j];
 
 				/* link particles if enable */
-				if(pJS.particles.line_linked.enable_auto){
-					pJS.fn.vendors.distanceParticles(p,p2);
+				if(particlesJS.o.particles.line_linked.enable_auto){
+					particlesJS.o.fn.vendors.distanceParticles(p,p2);
 				}
 
 				/* set interactivity if enable */
-				if(pJS.interactivity.enable){
+				if(particlesJS.o.interactivity.enable){
 
 					/* interactivity mode */
-					switch(pJS.interactivity.mode){
+					switch(particlesJS.o.interactivity.mode){
 						case 'grab':
-							pJS.fn.vendors.interactivity.grabParticles(p,p2);
+							particlesJS.o.fn.vendors.interactivity.grabParticles(p,p2);
 						break;
 					}
 
 				}
-				
+
 
 			}
 		}
 	};
 
-	pJS.fn.particlesDraw = function(){
+	particlesJS.o.fn.particlesDraw = function(){
 		/* clear canvas */
-		pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
+		particlesJS.o.canvas.ctx.clearRect(0, 0, particlesJS.o.canvas.w, particlesJS.o.canvas.h);
 
 		/* move particles */
-		pJS.fn.particlesAnimate();
+		particlesJS.o.fn.particlesAnimate();
 
 		/* draw each particle */
-		for(var i = 0; i < pJS.particles.array.length; i++){
-			var p = pJS.particles.array[i];
+		for(var i = 0; i < particlesJS.o.particles.array.length; i++){
+			var p = particlesJS.o.particles.array[i];
 			p.draw('rgba('+p.color.r+','+p.color.g+','+p.color.b+','+p.opacity+')');
 		}
-		
+
 	};
 
-	pJS.fn.particlesRemove = function(){
-		pJS.particles.array = [];
+	particlesJS.o.fn.particlesRemove = function(){
+		particlesJS.o.particles.array = [];
 	}
 
 
 	/* ---------- VENDORS functions ------------ */
 
-	pJS.fn.vendors.distanceParticles = function(p1, p2){
+	particlesJS.o.fn.vendors.distanceParticles = function(p1, p2){
 
 		var dx = p1.x - p2.x,
 			dy = p1.y - p2.y,
 			dist = Math.sqrt(dx*dx + dy*dy);
-		
+
 		/* Check distance between particle and mouse mos */
-		if(dist <= pJS.particles.line_linked.distance) {
-			
+		if(dist <= particlesJS.o.particles.line_linked.distance) {
+
 			/* draw the line */
-			var color_line = pJS.particles.line_linked.color_rgb_line;
-			pJS.canvas.ctx.beginPath();
-			pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist/pJS.particles.line_linked.distance) +')';
-			pJS.canvas.ctx.moveTo(p1.x, p1.y);
-			pJS.canvas.ctx.lineTo(p2.x, p2.y);
-			pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
-			pJS.canvas.ctx.stroke();
-			pJS.canvas.ctx.closePath();
+			var color_line = particlesJS.o.particles.line_linked.color_rgb_line;
+			particlesJS.o.canvas.ctx.beginPath();
+			particlesJS.o.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (particlesJS.o.particles.line_linked.opacity-dist/particlesJS.o.particles.line_linked.distance) +')';
+			particlesJS.o.canvas.ctx.moveTo(p1.x, p1.y);
+			particlesJS.o.canvas.ctx.lineTo(p2.x, p2.y);
+			particlesJS.o.canvas.ctx.lineWidth = particlesJS.o.particles.line_linked.width;
+			particlesJS.o.canvas.ctx.stroke();
+			particlesJS.o.canvas.ctx.closePath();
 
 			/* condensed particles */
-			if(pJS.particles.line_linked.condensed_mode.enable){
+			if(particlesJS.o.particles.line_linked.condensed_mode.enable){
 				var dx = p1.x - p2.x;
 					dy = p1.y - p2.y;
-				var ax = dx/(pJS.particles.line_linked.condensed_mode.rotateX*1000),
-					ay = dy/(pJS.particles.line_linked.condensed_mode.rotateY*1000);
+				var ax = dx/(particlesJS.o.particles.line_linked.condensed_mode.rotateX*1000),
+					ay = dy/(particlesJS.o.particles.line_linked.condensed_mode.rotateY*1000);
 				// p1.vx -= ax;
 				// p1.vy -= ay;
 				p2.vx += ax;
-				p2.vy += ay; 
+				p2.vy += ay;
 			}
 
 		}
 	}
 
-	pJS.fn.vendors.interactivity.listeners = function(){
-		if(pJS.interactivity.detect_on == 'window'){
+	particlesJS.o.fn.vendors.interactivity.listeners = function(){
+		if(particlesJS.o.interactivity.detect_on == 'window'){
 			var detect_el = window
 		}else{
-			var detect_el = pJS.canvas.el
+			var detect_el = particlesJS.o.canvas.el
 		}
-			
+
 		detect_el.onmousemove = function(e){
-			if(pJS.retina){
-				pJS.interactivity.mouse.pos_x = e.pageX*2;
-				pJS.interactivity.mouse.pos_y = e.pageY*2;
+			if(particlesJS.o.retina){
+				particlesJS.o.interactivity.mouse.pos_x = e.pageX*2;
+				particlesJS.o.interactivity.mouse.pos_y = e.pageY*2;
 			}else{
-				pJS.interactivity.mouse.pos_x = e.pageX;
-				pJS.interactivity.mouse.pos_y = e.pageY;
+				particlesJS.o.interactivity.mouse.pos_x = e.pageX;
+				particlesJS.o.interactivity.mouse.pos_y = e.pageY;
 			}
-			pJS.interactivity.status = 'mousemove';
+			particlesJS.o.interactivity.status = 'mousemove';
 		}
 		detect_el.onmouseleave = function(e){
-			pJS.interactivity.mouse.pos_x = 0;
-			pJS.interactivity.mouse.pos_y = 0;
-			pJS.interactivity.status = 'mouseleave';
+			particlesJS.o.interactivity.mouse.pos_x = 0;
+			particlesJS.o.interactivity.mouse.pos_y = 0;
+			particlesJS.o.interactivity.status = 'mouseleave';
 		}
 	}
 
-	pJS.fn.vendors.interactivity.grabParticles = function(p1, p2){
+	particlesJS.o.fn.vendors.interactivity.grabParticles = function(p1, p2){
 		var dx = p1.x - p2.x,
 			dy = p1.y - p2.y,
 			dist = Math.sqrt(dx*dx + dy*dy);
 
-		var dx_mouse = p1.x - pJS.interactivity.mouse.pos_x,
-			dy_mouse = p1.y - pJS.interactivity.mouse.pos_y,
+		var dx_mouse = p1.x - particlesJS.o.interactivity.mouse.pos_x,
+			dy_mouse = p1.y - particlesJS.o.interactivity.mouse.pos_y,
 			dist_mouse = Math.sqrt(dx_mouse*dx_mouse + dy_mouse*dy_mouse);
 
 		/* Check distance between 2 particles + Check distance between 1 particle and mouse position */
-		if(dist <= pJS.particles.line_linked.distance && dist_mouse <= pJS.interactivity.mouse.distance && pJS.interactivity.status == 'mousemove'){
+		if(dist <= particlesJS.o.particles.line_linked.distance && dist_mouse <= particlesJS.o.interactivity.mouse.distance && particlesJS.o.interactivity.status == 'mousemove'){
 			/* Draw the line */
-			var color_line = pJS.particles.line_linked.color_rgb_line;
-			pJS.canvas.ctx.beginPath();
-			pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist_mouse/pJS.interactivity.mouse.distance) +')';
-			pJS.canvas.ctx.moveTo(p1.x, p1.y);
-			pJS.canvas.ctx.lineTo(pJS.interactivity.mouse.pos_x, pJS.interactivity.mouse.pos_y);
-			pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
-			pJS.canvas.ctx.stroke();
-			pJS.canvas.ctx.closePath();
+			var color_line = particlesJS.o.particles.line_linked.color_rgb_line;
+			particlesJS.o.canvas.ctx.beginPath();
+			particlesJS.o.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (particlesJS.o.particles.line_linked.opacity-dist_mouse/particlesJS.o.interactivity.mouse.distance) +')';
+			particlesJS.o.canvas.ctx.moveTo(p1.x, p1.y);
+			particlesJS.o.canvas.ctx.lineTo(particlesJS.o.interactivity.mouse.pos_x, particlesJS.o.interactivity.mouse.pos_y);
+			particlesJS.o.canvas.ctx.lineWidth = particlesJS.o.particles.line_linked.width;
+			particlesJS.o.canvas.ctx.stroke();
+			particlesJS.o.canvas.ctx.closePath();
 		}
 	}
 
@@ -372,28 +372,28 @@ particlesJS.launch = function (tag_id, params) {
 	/* --------- LAUNCH ----------- */
 
 	function launchParticles(){
-		pJS.fn.canvasInit();
-		pJS.fn.canvasSize();
-		pJS.fn.canvasPaint();
-		pJS.fn.particlesCreate();
-		pJS.fn.particlesDraw();
+		particlesJS.o.fn.canvasInit();
+		particlesJS.o.fn.canvasSize();
+		particlesJS.o.fn.canvasPaint();
+		particlesJS.o.fn.particlesCreate();
+		particlesJS.o.fn.particlesDraw();
 	};
 
 
 	function launchAnimation(){
-		pJS.fn.particlesDraw();
+		particlesJS.o.fn.particlesDraw();
 		particlesJS.intervalId = requestAnimFrame(launchAnimation);
 	};
 
-	
+
 	launchParticles();
 
-	if(pJS.particles.anim.enable){
+	if(particlesJS.o.particles.anim.enable){
 		launchAnimation();
 	}
 
-	if(pJS.interactivity.enable){
-		pJS.fn.vendors.interactivity.listeners();
+	if(particlesJS.o.interactivity.enable){
+		particlesJS.o.fn.vendors.interactivity.listeners();
 	}
 
 
@@ -402,11 +402,11 @@ particlesJS.launch = function (tag_id, params) {
 /* --- VENDORS --- */
 
 window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       || 
-		  window.webkitRequestAnimationFrame || 
-		  window.mozRequestAnimationFrame    || 
-		  window.oRequestAnimationFrame      || 
-		  window.msRequestAnimationFrame     ||  
+  return  window.requestAnimationFrame       ||
+		  window.webkitRequestAnimationFrame ||
+		  window.mozRequestAnimationFrame    ||
+		  window.oRequestAnimationFrame      ||
+		  window.msRequestAnimationFrame     ||
 		  function(callback){
 			window.setTimeout(callback, 1000 / 60);
 		  };
@@ -453,7 +453,7 @@ particlesJS.load = function(tag_id, params){
 	if(!tag_id){
 		tag_id = 'particles-js';
 	}
-	
+
 	/* create canvas element */
 	var canvas_el = document.createElement('canvas');
 
