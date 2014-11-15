@@ -61,15 +61,15 @@ particlesJS.o = {
 };
 
 
-particlesJS.oSetter = function (changesObject) {
+particlesJS.oSetter = function (oToChange, oWithChanges) {
 	// copies new settings into default settings object without affecting the ones not defined in the changesObject
 
-	for(var key in changesObject) {
-		if('object' === typeof changesObject[key]) { // recurse
-			particlesJS.oSetter(changesObject[key]);
+	for(var key in oWithChanges) {
+		if('object' === typeof oWithChanges[key]) { // recurse
+			particlesJS.oSetter(oToChange[key], oWithChanges[key]);
 
 		} else { // set it!
-			particlesJS.o[key] = changesObject[key];
+			particlesJS.o[key] = oWithChanges[key];
 		}
 	}
 };
