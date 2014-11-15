@@ -5,6 +5,12 @@
 /* How to use? : Check the GitHub README
 /* ----------------------------------------------- */
 
+
+var particlesJS = {}; // define name space
+
+particlesJS.intervalId = null;
+
+
 function launchParticlesJS(tag_id, params){
 
 	/* particles.js variables with default values */
@@ -376,7 +382,7 @@ function launchParticlesJS(tag_id, params){
 
 	function launchAnimation(){
 		pJS.fn.particlesDraw();
-		requestAnimFrame(launchAnimation);
+		particlesJS.intervalId = requestAnimFrame(launchAnimation);
 	};
 
 	
@@ -406,6 +412,17 @@ window.requestAnimFrame = (function(){
 		  };
 })();
 
+window.cancelAnimationFrame = (function () {
+	return window.cancelAnimationFrame ||
+		window.webkitCancelAnimationFrame ||
+		window.mozCancelAnimationFrame ||
+		window.oCancelAnimationFrame ||
+		window.msCancelAnimationFrame ||
+		function(intervalId) {
+			window.clearTimeout(intervalId);
+		}
+}());
+
 function hexToRgb(hex){
     // By Tim Down - http://stackoverflow.com/a/5624139/3493650
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
@@ -424,7 +441,7 @@ function hexToRgb(hex){
 
 /* --- LAUNCH --- */
 
-window.particlesJS = function(tag_id, params){
+particlesJS.load = function(tag_id, params){
 
 	/* no string id? so it's object params, and set the id with default id */
 	if(typeof(tag_id) != 'string'){
