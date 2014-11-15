@@ -59,7 +59,7 @@ particlesJS.launch = function (tag_id, params) {
 		el: document.querySelector('#'+tag_id+' > canvas'),
 		w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
 		h: document.querySelector('#'+tag_id+' > canvas').offsetHeight
-	},
+	};
 
 	/* params settings */
 	if(params){
