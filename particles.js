@@ -11,7 +11,7 @@ var particlesJS = {}; // define name space
 particlesJS.intervalId = null;
 
 
-function launchParticlesJS(tag_id, params){
+particlesJS.launch = function (tag_id, params) {
 
 	/* particles.js variables with default values */
 	pJS = {
@@ -466,7 +466,7 @@ particlesJS.load = function(tag_id, params){
 
 	/* launch particle.js */
 	if(canvas != null){
-		launchParticlesJS(tag_id, params);
+		particlesJS.launch(tag_id, params);
 	}
 
 };
