@@ -85,7 +85,7 @@ particlesJS.launch = function (tag_id, params) {
 
 	/* params settings */
 	if(params) {
-		particlesJS.oSetter(params);
+		particlesJS.oSetter(particlesJS.o, params);
 	}
 
 	/* convert hex colors to rgb */
