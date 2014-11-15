@@ -53,6 +53,21 @@ particlesJS.o = {
 		}
 	};
 
+
+particlesJS.oSetter = function (changesObject) {
+	// copies new settings into default settings object without affecting the ones not defined in the changesObject
+
+	for(var key in changesObject) {
+		if('object' === typeof changesObject[key]) { // recurse
+			particlesJS.oSetter(particlesJS.o[key], changesObject[key]);
+
+		} else { // set it!
+			particlesJS.o[key] = changesObject[key];
+		}
+	}
+};
+
+
 particlesJS.launch = function (tag_id, params) {
 	// append canvas to default object
 	particlesJS.o.canvas = {
@@ -62,41 +77,8 @@ particlesJS.launch = function (tag_id, params) {
 	};
 
 	/* params settings */
-	if(params){
-		if(params.particles){
-			if(params.particles.color) particlesJS.o.particles.color = params.particles.color;
-			if(params.particles.shape) particlesJS.o.particles.shape = params.particles.shape;
-			if(params.particles.opacity) particlesJS.o.particles.opacity = params.particles.opacity;
-			if(params.particles.size) particlesJS.o.particles.size = params.particles.size;
-			if(params.particles.size_random == false) particlesJS.o.particles.size_random = params.particles.size_random;
-			if(params.particles.nb) particlesJS.o.particles.nb = params.particles.nb;
-			if(params.particles.line_linked){
-				if(params.particles.line_linked.enable_auto == false) particlesJS.o.particles.line_linked.enable_auto = params.particles.line_linked.enable_auto;
-				if(params.particles.line_linked.distance) particlesJS.o.particles.line_linked.distance = params.particles.line_linked.distance;
-				if(params.particles.line_linked.color) particlesJS.o.particles.line_linked.color = params.particles.line_linked.color;
-				if(params.particles.line_linked.opacity) particlesJS.o.particles.line_linked.opacity = params.particles.line_linked.opacity;
-				if(params.particles.line_linked.width) particlesJS.o.particles.line_linked.width = params.particles.line_linked.width;
-				if(params.particles.line_linked.condensed_mode){
-					if(params.particles.line_linked.condensed_mode.enable == false) particlesJS.o.particles.line_linked.condensed_mode.enable = params.particles.line_linked.condensed_mode.enable;
-					//if(params.particles.line_linked.condensed_mode.acceleration == false) particlesJS.o.particles.line_linked.condensed_mode.acceleration = params.particles.line_linked.condensed_mode.acceleration;
-					if(params.particles.line_linked.condensed_mode.rotateX) particlesJS.o.particles.line_linked.condensed_mode.rotateX = params.particles.line_linked.condensed_mode.rotateX;
-					if(params.particles.line_linked.condensed_mode.rotateY) particlesJS.o.particles.line_linked.condensed_mode.rotateY = params.particles.line_linked.condensed_mode.rotateY;
-				}
-			}
-			if(params.particles.anim){
-				if(params.particles.anim.enable == false) particlesJS.o.particles.anim.enable = params.particles.anim.enable;
-				if(params.particles.anim.speed) particlesJS.o.particles.anim.speed = params.particles.anim.speed;
-			}
-		}
-		if(params.interactivity){
-			if(params.interactivity.enable == false) particlesJS.o.interactivity.enable = params.interactivity.enable;
-			if(params.interactivity.mouse){
-				if(params.interactivity.mouse.distance) particlesJS.o.interactivity.mouse.distance = params.interactivity.mouse.distance;
-			}
-			if(params.interactivity.mode) particlesJS.o.interactivity.mode = params.interactivity.mode;
-			if(params.interactivity.detect_on) particlesJS.o.interactivity.detect_on = params.interactivity.detect_on;
-		}
-		particlesJS.o.retina_detect = params.retina_detect;
+	if(params) {
+		particlesJS.oSetter(params);
 	}
 
 	/* convert hex colors to rgb */
