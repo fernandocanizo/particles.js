@@ -61,33 +61,7 @@ particlesJS.o = {
 };
 
 
-particlesJS.oSetter = function (oToChange, oWithChanges) {
-	// copies new settings into default settings object without affecting the ones not defined in the changesObject
-
-	for(var key in oWithChanges) {
-		if('object' === typeof oWithChanges[key]) { // recurse
-			particlesJS.oSetter(oToChange[key], oWithChanges[key]);
-
-		} else { // set it!
-			particlesJS.o[key] = oWithChanges[key];
-		}
-	}
-};
-
-
-particlesJS.launch = function (tag_id, params) {
-	// append canvas to default object
-	particlesJS.o.canvas = {
-		el: document.querySelector('#'+tag_id+' > canvas'),
-		w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
-		h: document.querySelector('#'+tag_id+' > canvas').offsetHeight
-	};
-
-	/* params settings */
-	if(params) {
-		particlesJS.oSetter(particlesJS.o, params);
-	}
-
+particlesJS.launch = function () {
 	/* convert hex colors to rgb */
 	particlesJS.o.particles.color_rgb = hexToRgb(particlesJS.o.particles.color);
 	particlesJS.o.particles.line_linked.color_rgb_line = hexToRgb(particlesJS.o.particles.line_linked.color);
@@ -430,32 +404,32 @@ function hexToRgb(hex){
 
 /* --- LAUNCH --- */
 
-particlesJS.load = function(tag_id, params){
-
-	/* no string id? so it's object params, and set the id with default id */
-	if(typeof(tag_id) != 'string'){
-		params = tag_id;
+particlesJS.load = function(tag_id) {
+	// no id? set the id to default id
+	if(! tag_id || 'string' !== typeof tag_id) {
 		tag_id = 'particles-js';
 	}
 
-	/* no id? set the id to default id */
-	if(!tag_id){
-		tag_id = 'particles-js';
-	}
-
-	/* create canvas element */
+	// create canvas element
 	var canvas_el = document.createElement('canvas');
 
-	/* set size canvas */
+	// set canvas size
 	canvas_el.style.width = "100%";
 	canvas_el.style.height = "100%";
 
-	/* append canvas */
+	// append canvas
 	var canvas = document.getElementById(tag_id).appendChild(canvas_el);
 
-	/* launch particle.js */
-	if(canvas != null){
-		particlesJS.launch(tag_id, params);
-	}
+	// launch particle.js
+	if(canvas != null) {
+		// append canvas to default object
+		particlesJS.o.canvas = {
+			el: document.querySelector('#' + tag_id + ' > canvas'),
+			w: document.querySelector('#' + tag_id + ' > canvas').offsetWidth,
+			h: document.querySelector('#' + tag_id + ' > canvas').offsetHeight
+		};
 
+
+		particlesJS.launch();
+	}
 };
