@@ -63,8 +63,11 @@ particlesJS.o = {
 
 particlesJS.launch = function () {
 	/* convert hex colors to rgb */
-	particlesJS.o.particles.color_rgb = hexToRgb(particlesJS.o.particles.color);
-	particlesJS.o.particles.line_linked.color_rgb_line = hexToRgb(particlesJS.o.particles.line_linked.color);
+	particlesJS.o.particles.color_rgb = hexToRgb(particlesJS.o.particles.color) ||
+		console.error("Could not convert particlesJS.o.particles.color. Check it's value.");
+
+	particlesJS.o.particles.line_linked.color_rgb_line = hexToRgb(particlesJS.o.particles.line_linked.color) ||
+		console.error("Could not convert particlesJS.o.particles.line_linked.color. Check it's value.");
 
 	/* detect retina */
 	if(particlesJS.o.retina_detect){
