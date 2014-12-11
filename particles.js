@@ -9,6 +9,11 @@
 var particlesJS = {}; // define name space
 
 particlesJS.intervalId = null;
+particlesJS.runCounter = 0;
+// if different from zero, runs a callback every runCounter times. It can be used to change configuration parameters
+particlesJS.numberOfRuns = 0;
+particlesJS.callback = null;
+
 
 // particlesJS defaults object
 particlesJS.o = {
@@ -346,16 +351,26 @@ particlesJS.launch = function () {
 	};
 
 
-	function launchAnimation(){
+	particlesJS.launchAnimation = function () {
+		particlesJS.runCounter++;
+
+		if(0 !== particlesJS.numberOfRuns &&
+			'function' === typeof particlesJS.callback &&
+			0 === particlesJS.runCounter % particlesJS.numberOfRuns) {
+
+			// call callback function every numberOfRuns runs
+			particlesJS.callback();
+		}
+
 		particlesJS.o.fn.particlesDraw();
-		particlesJS.intervalId = requestAnimFrame(launchAnimation);
+		particlesJS.intervalId = requestAnimFrame(particlesJS.launchAnimation);
 	};
 
 
 	launchParticles();
 
 	if(particlesJS.o.particles.anim.enable){
-		launchAnimation();
+		particlesJS.launchAnimation();
 	}
 
 	if(particlesJS.o.interactivity.enable){
