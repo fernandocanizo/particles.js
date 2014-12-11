@@ -162,9 +162,12 @@ particlesJS.launch = function () {
 		this.vx = -.5 + Math.random();
 		this.vy = -.5 + Math.random();
 
-		/* draw function */
-		this.draw = function(){
-			particlesJS.o.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+		this.draw = function () {
+			// update colors and convert hex colors to rgb
+			this.color_rgb = hexToRgb(particlesJS.o.particles.color) ||
+				console.error("Could not convert particlesJS.o.particles.color. Check it's value.");
+
+			particlesJS.o.canvas.ctx.fillStyle = 'rgba(' + this.color_rgb.r + ',' + this.color_rgb.g + ',' + this.color_rgb.b + ',' + this.opacity + ')';
 			particlesJS.o.canvas.ctx.beginPath();
 
 			switch(particlesJS.o.particles.shape){
